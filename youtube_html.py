@@ -114,7 +114,7 @@ def find_videofile():#returns str (name of video file)
 
 
 if(__name__=="__main__"):	
-	filename="2youtube_html.py"
+	filename="youtube_html.py"
 	try:
 		youtubeurl=sys.argv[1]
 	except:
