@@ -1,0 +1,91 @@
+input[type=checkbox] {
+  display: none;
+}
+.info{
+margin-top:40px;
+}
+.hed{
+margin-bottom:40px;
+}
+.logon img{
+  width: 90px;
+  margin:14px;
+  float:left;
+  margin-left: 3%;
+}
+.container img {
+  margin-left: 3%;
+  margin-right: 3%;
+  margin-top: 12px;
+  margin-bottom: 2px;
+  transition: transform 0.25s ease;
+  cursor: zoom-in;
+  width: 40%;
+  align: center;
+}
+
+.container {
+  position: relative;
+}
+
+.top-right {
+  font-size:12px;
+  position: absolute;
+  top: 15px;
+  right: 5%;
+}
+.top-middle {
+  font-size:12px;
+  position: absolute;
+  top: 15px;
+  right: 51.7%;
+}
+
+
+input[type=checkbox]:checked ~ label > img {
+  /*transform: scale(2) translate(18%);*/
+  width:100%;
+  margin-left:0px;
+  margin-right:0px;
+  margin-top:0px;
+  margin-bottom:0px;
+  cursor: zoom-out;
+}
+p {
+	font-size: 130%;
+	margin-left: 3%;
+	margin-right:auto;
+	width:92%;
+	margin-top: 8px;
+	margin-bottom: 12px;
+	max-width:950px;
+}
+h1 {
+	margin-left: 30%;
+	margin-right: 5%;
+	margin-top: 50px;
+	margin-bottom: 5px;
+}
+h5 {
+	margin-left: 3%;
+	margin-right: 15%;
+	margin-top: 8px;
+	margin-bottom: 13px;
+	color: black;
+}
+
+.description {
+  font-size:10px;
+  margin-top: 14px;
+}
+
+summary {
+  font-size:23px;
+  margin-left:30%;
+  margin-top:13px;
+}
+
+body {
+	font-family: Helvetica, Arial;
+}
+
