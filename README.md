@@ -4,6 +4,9 @@
 # PrintYoutube
 
 
+__DEMO__ on [http://printyoutube.com]
+might take very long since youtube is Issuing my server speed limits.
+
 this is intended for saving time, as you can have an overview on a video relatively quickly.
 
 I use this for lectures, guides, and tutorials.
