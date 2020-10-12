@@ -34,7 +34,7 @@ class YTB:
 	def get_meta(yt):#returns meta dict
 		os.system('youtube-dl --write-info-json --write-sub --write-auto-sub --write-annotations --skip-download --id '+yt.id)
 		os.system('rm *.??.vtt > /dev/null')
-		meta=json.loads(open(v.id+".info.json").read())
+		meta=json.loads(open(yt.id+".info.json").read())
 		yt.meta=meta
 		return meta
 	def get_lang(yt):#returns str (en)
