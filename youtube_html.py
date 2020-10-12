@@ -184,13 +184,14 @@ if(__name__=="__main__"):
 	if not(v.videofile in os.listdir()):
 		v.videofile=find_videofile()	
 		
+	print("[INFO] Format : "+v.res+"p")
 	retrys=0
 	while not(v.videofile in os.listdir()) and retrys < v.retries:
 		if(retrys >=1): time.sleep(v.cooldown)
 		retrys +=1
 		print("[INFO] Downloading YT video try: "+str(retrys))
 		if retrys==v.retries:
-			ress=480
+			v.res=480
 			print("[INFO] Last try reset resolution to 480p")
 		v.download_video()
 		os.system('mv '+v.id+'*.vtt '+v.subfile+(' > /dev/null' if v.debug==0 else ''))
@@ -222,7 +223,7 @@ if(__name__=="__main__"):
 	print("Video Duration    : "+str(v.maxseconds))
 	print("Directory         : "+v.out+v.id+"/")
 	print("Language (Subs)   : "+v.lang)
-	print("Video Description :\n  "+v.description[:600].replace("\n","\n  "),'[...]' if(len(v.description)>=600) else None)
+	print("Video Description :\n  "+v.description[:v.description.find(" ",500)].replace("\n","\n  ")+('[...]' if(len(v.description)>=v.description.find(" ",500)) else ''))
 
 	if not("frames" in os.listdir()):
 		os.system("python2 "+scriptdir+"download_and_convert.py "+v.videofile+" "+str(v.keylevel)+(' > /dev/null' if v.debug==0 else ''))		
