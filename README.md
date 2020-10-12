@@ -29,7 +29,7 @@ sudo python2 -m pip install scipy numpy
 ```
 
 ### usage:
-`python3 youtube_html.py LINK/ID [--lang=XY] [--no-pdf] [--no-cleanup] [--speed=10M] [--keylevel=3] [--format=480]`
+`python3 youtube_html.py LINK/ID [--lang=XY] [--no-pdf] [--no-cleanup] [--speed=10M] [--keylevel=3] [--format=480] [--proxy=socks5://u:p@server:port] [--verbose]`
 
 yotube-html downloads the Video, uses ffmpeg to extract i-frames, then another python script to select "worthy" frames from those. 
 
