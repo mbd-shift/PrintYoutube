@@ -29,8 +29,7 @@ class YTB:
 		self.cooldown=30
 		self.title=""
 		self.description=""
-		self.time_data=[]
-		
+		self.time_data=[]	
 	def get_meta(yt):#returns meta dict
 		os.system('youtube-dl --write-info-json --write-sub --write-auto-sub --write-annotations --skip-download --id '+yt.id)
 		os.system('rm *.??.vtt > /dev/null')
