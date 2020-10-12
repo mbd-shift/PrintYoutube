@@ -30,9 +30,12 @@ class YTB:
 		self.title=""
 		self.description=""
 		self.time_data=[]	
+		self.debug=0
 	def get_meta(yt):#returns meta dict
-		os.system('youtube-dl --write-info-json --write-sub --write-auto-sub --write-annotations --skip-download --id '+yt.id)
-		os.system('rm *.??.vtt > /dev/null')
+		if(not os.path.isfile(yt.out+yt.id+"/"+yt.id+".info.json")):
+			cmd='youtube-dl --write-info-json --write-sub --write-auto-sub --write-annotations --skip-download --id '+yt.id+(' > /dev/null' if yt.debug==0 else '')
+			os.system(cmd)
+			os.system('rm *.??.vtt > /dev/null')
 		meta=json.loads(open(yt.id+".info.json").read())
 		yt.meta=meta
 		return meta
@@ -53,7 +56,7 @@ class YTB:
 		return lang
 	def download_video(yt):
 		fmt='best[height<='+str(yt.res)+']'
-		os.system('youtube-dl -i --proxy "'+yt.proxy+'" --socket-timeout 34 --sub-lang '+yt.lang+' --format "'+fmt+'" --write-sub --write-auto-sub --no-playlist --write-info-json --write-thumbnail --id -r '+yt.speed+' '+yt.id)
+		os.system('youtube-dl -i --proxy "'+yt.proxy+'" --socket-timeout 34 --sub-lang '+yt.lang+' --format "'+fmt+'" --write-sub --write-auto-sub --no-playlist --write-info-json --write-thumbnail --id -r '+yt.speed+' '+yt.id+(' > /dev/null' if yt.debug==0 else ''))
 	def generate_time_data(yt,framesdir="frames"):#0 time in s     1 data (image or text)     2 type ("image" or "text")     3 time as timestamped
 		yt.maxseconds=int(yt.meta["duration"])
 		yt.maxframes=int(os.popen('mediainfo --Output="Video;%FrameCount%" '+yt.videofile).read().replace("\n",""))	
@@ -129,9 +132,9 @@ if(__name__=="__main__"):
 	youtubeurl="https://www.youtube.com/watch?v="+v.id
 	
 	if not os.path.isdir(v.out):
-		os.system("mkdir "+v.out)
+		os.system("mkdir "+v.out+(' > /dev/null' if v.debug==0 else ''))
 	if not os.path.isfile(v.out+"stylecompact.css"):
-		os.system("cp "+scriptdir+"logo_notext.png "+scriptdir+"logo_.png "+scriptdir+"stylecompact.css "+v.out+" >> /dev/null")
+		os.system("cp "+scriptdir+"logo_notext.png "+scriptdir+"logo_.png "+scriptdir+"stylecompact.css "+v.out+(' > /dev/null' if v.debug==0 else ''))
 		
 	for i in sys.argv:
 		if("--no-cleanup" in i):
@@ -148,6 +151,8 @@ if(__name__=="__main__"):
 			v.speed=i[i.index("=")+1:]
 		elif("--format=" in i):
 			v.res=i[i.index("=")+1:]
+		elif("--verbose" in i):
+			v.debug=1
 		elif(i==sys.argv[1]):
 			None
 		elif(i==filename):
@@ -162,7 +167,7 @@ if(__name__=="__main__"):
 
 	os.chdir(v.out)
 	if not(v.id in os.listdir()):
-		os.system('mkdir '+v.id)
+		os.system('mkdir '+v.id+(' > /dev/null' if v.debug==0 else ''))
 	os.chdir(v.id)#------------------------------------chdir youtubeid
 	
 	v.subfile= v.id+".vtt"
@@ -188,14 +193,14 @@ if(__name__=="__main__"):
 			ress=480
 			print("[INFO] Last try reset resolution to 480p")
 		v.download_video()
-		os.system('mv '+v.id+'*.vtt '+v.subfile)
+		os.system('mv '+v.id+'*.vtt '+v.subfile+(' > /dev/null' if v.debug==0 else ''))
 		if not(v.videofile in os.listdir()):
 			v.videofile=find_videofile()
 			
 	if not(v.subfile in os.listdir()):
-		os.system("rm *.vtt")
-		os.system('youtube-dl --proxy "'+v.proxy+'" --write-sub --lang '+v.lang+' --write-auto-sub --skip-download --id '+v.id)
-		os.system('mv '+v.id+'*.vtt '+v.subfile)
+		os.system("rm *.vtt"+(' > /dev/null' if v.debug==0 else ''))
+		os.system('youtube-dl --proxy "'+v.proxy+'" --write-sub --lang '+v.lang+' --write-auto-sub --skip-download --id '+v.id+(' > /dev/null' if v.debug==0 else ''))
+		os.system('mv '+v.id+'*.vtt '+v.subfile+(' > /dev/null' if v.debug==0 else ''))
 	v.subs=1
 	if not(v.subfile in os.listdir()):
 		v.subs=0
@@ -217,14 +222,12 @@ if(__name__=="__main__"):
 	print("Video Duration    : "+str(v.maxseconds))
 	print("Directory         : "+v.out+v.id+"/")
 	print("Language (Subs)   : "+v.lang)
-	#print("Video Description:\n"+description)
+	print("Video Description :\n  "+v.description[:600].replace("\n","\n  "),'[...]' if(len(v.description)>=600) else None)
 
 	if not("frames" in os.listdir()):
-		os.system("python2 "+scriptdir+"download_and_convert.py "+v.videofile+" "+str(v.keylevel))		
+		os.system("python2 "+scriptdir+"download_and_convert.py "+v.videofile+" "+str(v.keylevel)+(' > /dev/null' if v.debug==0 else ''))		
 	if not("frames" in os.listdir()):
-		os.system("python2 "+scriptdir+"download_and_convert.py "+v.videofile+" "+str(v.keylevel))
-		
-		
+		os.system("python2 "+scriptdir+"download_and_convert.py "+v.videofile+" "+str(v.keylevel)+(' > /dev/null' if v.debug==0 else ''))
 
 	v.generate_time_data()
 	
@@ -302,14 +305,14 @@ if(__name__=="__main__"):
 		os.system("wkhtmltopdf --encoding utf-8 --custom-header 'meta' 'charset=utf-8' index.html "+v.out+v.id+".pdf")
 		if cleanup==1:
 			os.chdir(v.out)
-			os.system("rm -r "+v.id)
+			os.system("rm -r "+v.id+(' > /dev/null' if v.debug==0 else ''))
 			cleanup=0
-			os.system("rm logo_.png stylecompact.css")
+			os.system("rm logo_.png stylecompact.css"+(' > /dev/null' if v.debug==0 else ''))
 	if cleanup==1:
 		print("[cleanup enabled]")
-		os.system('rm -R keyframes')
-		os.system('rm "'+v.videofile+'"')
-		os.system('rm "'+v.id+'.vtt"')
-		os.system('rm "'+v.id+'.webp"')
-		os.system('rm "'+v.id+'.jpg"')
-		os.system('rm "'+v.id+'.info.json"')
+		os.system('rm -R keyframes'+(' > /dev/null' if v.debug==0 else ''))
+		os.system('rm "'+v.videofile+'"'+(' > /dev/null' if v.debug==0 else ''))
+		os.system('rm "'+v.id+'.vtt"'+(' > /dev/null' if v.debug==0 else ''))
+		os.system('rm "'+v.id+'.webp"'+(' > /dev/null' if v.debug==0 else ''))
+		os.system('rm "'+v.id+'.jpg"'+(' > /dev/null' if v.debug==0 else ''))
+		os.system('rm "'+v.id+'.info.json"'+(' > /dev/null' if v.debug==0 else ''))

@@ -50,6 +50,10 @@ for __example__:
 
 **--format** can specify video resolution, e.g. 720, 1080, 480, 360. Default is 480. For printing recommended is 360, for digital 720 (so you can zoom in the PDF)
 
+**--proxy** specify a proxy server in the format protocol://[username:password@]server:port 
+
+**--verbose** prints more info for debugging etc
+
 if you plan to experiment with a video, be sure to enable --no-cleanup, as you will save time because it is not downloaded again and again
 
 ### html
